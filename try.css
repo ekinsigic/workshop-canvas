@@ -1,0 +1,18 @@
+body {
+    background: grey;
+}
+#canvas {
+    background: white;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin-left: -350px;
+    margin-top: -350px;
+    cursor: none;
+}
+#char {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background: black
+}
