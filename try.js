@@ -12,135 +12,53 @@ var canvasOffset = $(canvas).offset();
 
 var x = 350,
     y = x * 2,
-    defaultMovingSpeed = 1,
+    defaultMovingSpeed = 0.5,
     lineOpacity = 0.02,
     thickness = 1,
-    sensitivity = 0.2,
+    sensitivity = 2,
+    mouseX = x,
+    mouseY = y,
     movingSpeed = defaultMovingSpeed;
 
 context.moveTo(350, 700);
 
+var direction = 'there';
+
 var drawing = setInterval(function () {
-    console.log('interval!');
+    myPath.push([mouseX - canvasOffset.left , mouseY - canvasOffset.top]);
     myStroke();
-    y--;
+    if (direction === 'there') {
+        y--;
+    } else {
+        y++;
+    }
     if(y == 0) {
-        stopMove();
+        direction = 'andback';
+    } else if (y == 700) {
+        direction = 'there';
     }
-},generalSpeed);
+},1);
 
-
-$(canvas).mousedown(function(e){
-    myPath.push([e.pageX - canvasOffset.left , e.pageY - canvasOffset.top]);
+$(canvas).bind('mousemove',function(e){
+    mouseX = e.pageX;
+    mouseY = e.pageY;
+    myPath.push([mouseX - canvasOffset.left , mouseY - canvasOffset.top]);
     myStroke();
-    $(canvas).bind('mousemove',function(e){
-        myPath.push([e.pageX - canvasOffset.left , e.pageY - canvasOffset.top]);
-        myStroke();
-    });
-    $(canvas).mouseup(function(e){
-        $(canvas).unbind('mousemove');
-    });
 });
 
-$(window).keydown(function(e){
-
-
-    if(e.which == 37) {
-        x = x - movingSpeed;
-        movingSpeed = movingSpeed + sensitivity;
-        myStroke();
-        $(window).keyup(function(){
-            movingSpeed = defaultMovingSpeed;
-        });
-    }
-    else if (e.which == 39) {
-        x = x + movingSpeed;
-        movingSpeed = movingSpeed + sensitivity;
-        myStroke();
-        $(window).keyup(function(){
-            movingSpeed = defaultMovingSpeed;
-        });
-    }
-    else if (e.which == 40) {
-        y = y + movingSpeed;
-        movingSpeed = movingSpeed + sensitivity;
-        myStroke();
-        $(window).keyup(function(){
-            movingSpeed = defaultMovingSpeed;
-        });
-    }
-    else if (e.which == 38) {
-        y = y - movingSpeed;
-        movingSpeed = movingSpeed + sensitivity;
-        myStroke();
-        $(window).keyup(function(){
-            movingSpeed = defaultMovingSpeed;
-        });
-    }
-
-
-    else if (e.which == 32) {
-        stopMove();
-    }
-});
-
-var stopMove = function(){
-    if(isOnMove) {
-        clearInterval(drawing);
-        isOnMove = false;
-        console.log('stopped!');
-    }
-    else {
-        drawing = setInterval(function () {
-            myStroke();
-            y--;
-            if(y == 0) {
-                stopMove();
-            }
-        },generalSpeed);
-        isOnMove = true;
-    }
-};
-
-var qwert = 0;
 var myStroke = function() {
     context.beginPath();
     context.clearRect(0,0,canvas.width,canvas.height);
-    console.log('begin path');
+    context.fillStyle = 'black';
+    context.fillRect(0,0,canvas.width,canvas.height);
     myPath.push([x,y]);
-    console.log('push to path');
+    context.strokeStyle = 'rgba(255,255,255,'+ 1 +')';
+    context.lineWidth = 0.03;
     for (var i = 0; i < myPath.length; i++) {
         var thisX = myPath[i][0];
         var thisY = myPath[i][1];
         context.lineTo(thisX, thisY);
     }
-    console.log('for loop');
-    context.strokeStyle = 'rgba(0,0,0,'+ lineOpacity +')';
-    context.lineWidth = thickness;
     context.stroke();
-    console.log('stroke');
     context.closePath();
-    console.log('closePath');
-    console.log('qwert ' + qwert + ' finished');
-
-    qwert++;
-    console.log('---------------------------------------------------------------');
-    console.log('---------------------------------------------------------------');
-    console.log('---------------------------------------------------------------');
 };
-
-
-//
-//
-//var char = $('#char');
-//
-//move(char);
-//function move($elem) {
-//    if( $elem.css('top') == 'auto') {
-//        $elem.css('top','0');
-//    }
-//    setInterval(function(){
-//        $elem.css('top', parseInt(char.css('top')) + 20 + 'px');
-//        console.log($elem.css('top'));
-//    },1000)
-//};
