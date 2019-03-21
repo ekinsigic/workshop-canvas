@@ -41,6 +41,16 @@ $(canvas).bind('mousemove',function(e){
     myStroke();
 });
 
+$(canvas).bind('touchmove',function(e){
+    console.log(e);
+    mouseX = e.originalEvent.touches[0].clientX;
+    mouseY = e.originalEvent.touches[0].clientY;
+    myPath.push([mouseX - canvasOffset.left , mouseY - canvasOffset.top]);
+    myStroke();
+});
+
+
+
 var myStroke = function() {
     context.beginPath();
     context.clearRect(0,0,canvas.width,canvas.height);
