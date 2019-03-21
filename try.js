@@ -5,11 +5,6 @@ var canvas = document.getElementById('canvas'),
     isOnMove = true;
 var canvasOffset = $(canvas).offset();
 
-
-
-
-
-
 var x = 350,
     y = x * 2,
     defaultMovingSpeed = 0.5,
@@ -37,7 +32,7 @@ var drawing = setInterval(function () {
     } else if (y == 700) {
         direction = 'there';
     }
-},1);
+},50);
 
 $(canvas).bind('mousemove',function(e){
     mouseX = e.pageX;
